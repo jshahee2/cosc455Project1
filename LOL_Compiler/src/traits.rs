@@ -1,4 +1,4 @@
-// Chose Option 2 for trait
+// Chose Option 2 for syntax trait
 
 pub trait SyntaxAnalyzer {
   fn parse_lolcode(&mut self) -> Result<(), String>;
@@ -20,3 +20,16 @@ pub trait SyntaxAnalyzer {
   fn parse_text(&mut self) -> Result<(), String>;
 }
 
+pub trait Compiler {
+    fn compile(&mut self, source: &str);
+    fn next_token(&mut self) -> String;
+    fn parse(&mut self);
+    fn current_token(&self) -> String;
+    fn set_current_token(&mut self, tok: String);
+}
+
+pub trait LexicalAnalyzer {
+    fn get_char(&mut self) -> char;
+    fn add_char(&mut self, c: char);
+    fn lookup(&self, s: &str) -> bool;
+}
