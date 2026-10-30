@@ -1,0 +1,74 @@
+HAI ::= "#HAI"          
+KBYE ::= "#KBYE"        
+OBTW ::= "#OBTW"       
+TLDR ::= "#TLDR"
+MAEK ::= "#MAEK"        
+OIC ::= "#OIC"          
+GIMMEH ::= "#GIMMEH"   
+MKAY ::= "#MKAY"
+IHAZ ::= "#IHAZ"        
+ITIZ ::= "#ITIZ"        
+NEWLINE ::= "#NEWLINE"
+HEAD ::= "HEAD"         
+TITLE ::= "TITLE"       
+PARAGRAF ::= "PARAGRAF"
+BOLD ::= "BOLD"         
+LIST ::= "LIST"         
+ITEM ::= "ITEM"
+LINX ::= "LINX"         
+VAR ::= "VAR"
+
+VARNAME  ::= a single word of letters (A-Z, a-z)
+TEXT     ::= one plain-text word (letters, digits , . " : ? ! % = /). The lexer returns text one word at a time.
+ADDRESS  ::= one word with no spaces
+
+
+
+<lolcode>                 ::= HAI <comments> <head> <optional-variable-define> <body> KBYE
+
+<comments>                ::= <comment> <comments> | ε
+<comment>                 ::= OBTW <text-list> TLDR
+<text-list>               ::= TEXT <text-list> | ε
+
+<head>                    ::= MAEK HEAD <title> MKAY | ε
+<title>                   ::= GIMMEH TITLE <text-list> OIC
+
+<optional-variable-define>::= <variable-define> | ε
+<variable-define>         ::= IHAZ VARNAME ITIZ <text-list> MKAY
+
+<body>                    ::= <inner-body> <body> | ε
+<inner-body>              ::= <paragraph>
+                            | <comment>
+                            | <bold>
+                            | <list>
+                            | <link>
+                            | <newline>
+                            | <variable-use>
+                            | TEXT
+
+<paragraph>               ::= MAEK PARAGRAF <optional-variable-define> <inner-paragraph> MKAY
+<inner-paragraph>         ::= <inner-text> <inner-paragraph> | ε
+<inner-text>              ::= <variable-use>
+                            | <comment>
+                            | <bold>
+                            | <list>
+                            | <link>
+                            | <newline>
+                            | TEXT
+
+<bold>                    ::= GIMMEH BOLD <text-list> OIC
+
+<list>                    ::= MAEK LIST <list-item> <list-items> MKAY
+<list-items>              ::= <list-item> <list-items> | ε
+<list-item>               ::= GIMMEH ITEM <optional-variable-define> <inner-list> OIC
+<inner-list>              ::= <list-content> <inner-list> | ε
+<list-content>            ::= <bold>
+                            | <comment>
+                            | <link>
+                            | <newline>
+                            | <variable-use>
+                            | TEXT
+
+<link>                    ::= GIMMEH LINX ADDRESS OIC
+<newline>                 ::= NEWLINE
+<variable-use>            ::= GIMMEH VAR VARNAME OIC
