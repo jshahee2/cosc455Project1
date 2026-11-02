@@ -52,7 +52,7 @@ impl LolCompiler {
         loop {
             let tok = self.next_token();
             if tok.is_empty() {
-                break;
+                break;        // end of the file
             }
             self.tokens.push(tok);
             self.lines.push(self.line);
@@ -62,15 +62,20 @@ impl LolCompiler {
 
 impl Compiler for LolCompiler {
     fn compile(&mut self, source: &str) {
-        // IMPLEMENTTTTTTTTTTTTTTTT
+        self.load_tokens(source);
+        self.parse();
     }
 
     fn next_token(&mut self) -> String {
-        // ALSO IMPLEMENTTTTTTTTTTT
+        self.read_token();
     }
 
     fn parse(&mut self) {
-        // ALSO ALSOOOO IMPLEMENTTTTTTTTTTTTTTT
+        self.start_parsing();
+        if let Err(message) = self.parse_lolcode() {
+            eprintln!("{}", message);
+            process::exit(1);
+        }
     }
 
     fn current_token(&self) -> String {
