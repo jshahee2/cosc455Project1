@@ -1,6 +1,10 @@
 use std::collections::HashMap;
+use std::process;
+
 
 use crate::traits::Compiler;
+use crate::traits::SyntaxAnalyzer;
+
 
 pub struct LolCompiler {
     // used by the lexer
@@ -67,7 +71,7 @@ impl Compiler for LolCompiler {
     }
 
     fn next_token(&mut self) -> String {
-        self.read_token();
+        self.read_token()
     }
 
     fn parse(&mut self) {
