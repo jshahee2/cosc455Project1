@@ -1,0 +1,5 @@
+#HAI
+#MAEK PARAGRAF
+#GIMMEH BOLD never closed
+#MKAY
+#KBYE

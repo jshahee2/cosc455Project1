@@ -1,0 +1,4 @@
+#HAI
+#MAEK PARAGRAF
+Text
+#KBYE

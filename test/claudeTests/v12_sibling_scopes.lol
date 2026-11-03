@@ -1,0 +1,10 @@
+#HAI
+#MAEK PARAGRAF
+#IHAZ mood #ITIZ happy #MKAY
+I feel #GIMMEH VAR mood #OIC
+#MKAY
+#MAEK PARAGRAF
+#IHAZ mood #ITIZ sad #MKAY
+I feel #GIMMEH VAR mood #OIC
+#MKAY
+#KBYE

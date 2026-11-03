@@ -1,0 +1,5 @@
+#HAI
+#MAEK PARAGRAF
+Hello #GIMMEH VAR name #OIC
+#MKAY
+#KBYE

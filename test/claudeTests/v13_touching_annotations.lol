@@ -1,0 +1,7 @@
+#HAI
+#MAEK PARAGRAF
+Line one#NEWLINE
+Line two#NEWLINE
+#GIMMEH BOLD tight#OIC next
+#MKAY
+#KBYE

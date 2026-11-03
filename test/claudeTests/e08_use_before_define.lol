@@ -1,0 +1,6 @@
+#HAI
+Value is #GIMMEH VAR late #OIC
+#MAEK PARAGRAF
+#IHAZ late #ITIZ ok #MKAY
+#MKAY
+#KBYE

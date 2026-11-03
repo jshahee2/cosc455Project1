@@ -1,0 +1,15 @@
+#HAI
+#MAEK HEAD
+#GIMMEH TITLE Grocery List #OIC
+#MKAY
+#MAEK PARAGRAF
+Things to buy: #NEWLINE
+#MAEK LIST
+#GIMMEH ITEM Apples #OIC
+#GIMMEH ITEM #GIMMEH BOLD Organic #OIC milk #OIC
+#GIMMEH ITEM Recipes at #GIMMEH LINX www.recipes.com #OIC #OIC
+#GIMMEH ITEM Eggs #NEWLINE dozen #OIC
+#GIMMEH ITEM #OBTW hidden note #TLDR Bread #OIC
+#MKAY
+#MKAY
+#KBYE
