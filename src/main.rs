@@ -1,3 +1,5 @@
+//! contains the main function for the lolcode compiler
+
 mod compiler;
 mod lexer;
 mod parser;
@@ -11,6 +13,7 @@ use std::process::{self, Command};
 use compiler::LolCompiler;
 use traits::Compiler;
 
+/// starts the lolcode compiler
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() != 2 {
@@ -49,7 +52,7 @@ fn main() {
     open_in_browser(&output_path);
 }
 
-// ask to open in respective computers default browser
+/// ask to open in respective computers default browser
 fn open_in_browser(path: &Path) {
     let result = if cfg!(target_os = "macos") {
         Command::new("open").arg(path).status()

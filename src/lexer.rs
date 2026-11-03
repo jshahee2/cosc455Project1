@@ -1,3 +1,5 @@
+//! contains the lexical analyzer for the lolcode compiler
+
 use std::process;
 
 use crate::compiler::LolCompiler;
@@ -72,7 +74,7 @@ impl LolCompiler {
 }
 
 impl LexicalAnalyzer for LolCompiler {
-    // returns next character and moves forward
+    /// returns next character and moves forward
     fn get_char(&mut self) -> char {
         if self.pos >= self.chars.len() {
             eprintln!("Lexical error: tried to read past the end of the file");

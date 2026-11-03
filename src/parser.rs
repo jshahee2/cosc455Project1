@@ -1,3 +1,5 @@
+//! check the syntax of the lolcode program and generates html output
+
 use std::collections::HashMap;
 
 use crate::compiler::LolCompiler;
@@ -5,21 +7,21 @@ use crate::traits::{Compiler, SyntaxAnalyzer};
 
 
 impl LolCompiler {
-    // put parser at first token
+    /// put parser at first token
     pub fn start_parsing(&mut self) {
         self.tok_pos = 0;
         let first = self.tokens.first().cloned().unwrap_or_default();
         self.set_current_token(first);
     }
 
-    // go to next token
+    /// go to next token
     fn advance(&mut self) {
         self.tok_pos += 1;
         let next = self.tokens.get(self.tok_pos).cloned().unwrap_or_default();
         self.set_current_token(next);
     }
 
-    // look at the token after current one
+    /// look at the token after current one
     fn peek(&self) -> String {
         self.tokens
             .get(self.tok_pos + 1)
@@ -27,17 +29,17 @@ impl LolCompiler {
             .unwrap_or_default()
     }
 
-    // check token validity
+    /// check token validity
     fn check(&self, wanted: &str) -> bool {
         self.current.to_uppercase() == wanted
     }
 
-    // checks if token is text
+    /// checks if token is text
     fn is_text(&self) -> bool {
         !self.current.is_empty() && !self.current.starts_with('#')
     }
 
-    // error line specifier
+    /// error line specifier
     fn error_line(&self) -> usize {
         self.lines
             .get(self.tok_pos)
@@ -46,7 +48,7 @@ impl LolCompiler {
             .unwrap_or(1)
     }
 
-    // desribe current token for error messages
+    /// describe current token for error messages
     fn describe_current(&self) -> String {
         if self.current.is_empty() {
             "end of file".to_string()
@@ -55,7 +57,7 @@ impl LolCompiler {
         }
     }
 
-    // check expected token and if its correct move on, wrong throw an error
+    /// check expected token and if its correct move on, wrong throw an error
     fn expect(&mut self, wanted: &str) -> Result<(), String> {
         if self.check(wanted) {
             self.advance();
@@ -70,11 +72,12 @@ impl LolCompiler {
         }
     }
 
+    /// add string to the html output
     fn emit(&mut self, s: &str) {
         self.html.push_str(s);
     }
 
-    // checks if innter text is in a valid place
+    /// checks if innter text is in a valid place
     fn starts_inner_text(&self, allow_list: bool) -> bool {
         if self.is_text() || self.check("#OBTW") || self.check("#NEWLINE") {
             return true;
@@ -89,7 +92,7 @@ impl LolCompiler {
         false
     }
 
-    // look for variable, static scoping
+    /// look for variable, static scoping
     fn find_variable(&self, name: &str) -> Option<String> {
         for scope in self.scopes.iter().rev() {
             if let Some(value) = scope.get(name) {
@@ -103,7 +106,7 @@ impl LolCompiler {
 
 
 impl SyntaxAnalyzer for LolCompiler {
-    // <lolcode> ::= HAI <comments> <head> <optional-variable-define> <body> KBYE
+    /// <lolcode> ::= HAI <comments> <head> <optional-variable-define> <body> KBYE
     fn parse_lolcode(&mut self) -> Result<(), String> {
         self.expect("#HAI")?;
         self.emit("<html>\n");
@@ -133,7 +136,7 @@ impl SyntaxAnalyzer for LolCompiler {
         Ok(())
     }
 
-    // <head> ::= MAEK HEAD <title> MKAY | empty
+    /// <head> ::= MAEK HEAD <title> MKAY | empty
     fn parse_head(&mut self) -> Result<(), String> {
         if self.check("#MAEK") && self.peek() == "HEAD" {
             self.expect("#MAEK")?;
@@ -146,7 +149,7 @@ impl SyntaxAnalyzer for LolCompiler {
         Ok(())
     }
 
-    // <title> ::= GIMMEH TITLE TEXT OIC
+    /// <title> ::= GIMMEH TITLE TEXT OIC
     fn parse_title(&mut self) -> Result<(), String> {
         self.expect("#GIMMEH")?;
         self.expect("TITLE")?;
@@ -160,7 +163,7 @@ impl SyntaxAnalyzer for LolCompiler {
         Ok(())
     }
 
-    // <comment> ::= OBTW TEXT TLDR
+    /// <comment> ::= OBTW TEXT TLDR
     fn parse_comment(&mut self) -> Result<(), String> {
         self.expect("#OBTW")?;
         let mut words: Vec<String> = Vec::new();
@@ -173,7 +176,7 @@ impl SyntaxAnalyzer for LolCompiler {
         Ok(())
     }
 
-    // <body> ::= <inner-body> <body> | empty
+    /// <body> ::= <inner-body> <body> | empty
     fn parse_body(&mut self) -> Result<(), String> {
         loop {
             if self.check("#MAEK") && self.peek() == "PARAGRAF" {
@@ -203,7 +206,7 @@ impl SyntaxAnalyzer for LolCompiler {
         Ok(())
     }
 
-    // <inner-paragraph> ::= <inner-text> <inner-paragraph> | empty
+    /// <inner-paragraph> ::= <inner-text> <inner-paragraph> | empty
     fn parse_inner_paragraph(&mut self) -> Result<(), String> {
         while self.starts_inner_text(true) {
             self.parse_inner_text()?;
@@ -217,8 +220,8 @@ impl SyntaxAnalyzer for LolCompiler {
         Ok(())
     }
 
-    // <inner-text> ::= <variable-use> | <comment> | <bold> | <list> | <link> | <newline> | TEXT
-    // check current token and choose rule based on that
+    /// <inner-text> ::= <variable-use> | <comment> | <bold> | <list> | <link> | <newline> | TEXT
+    /// check current token and choose rule based on that
     fn parse_inner_text(&mut self) -> Result<(), String> {
         if self.is_text() {
             self.parse_text()
@@ -252,8 +255,8 @@ impl SyntaxAnalyzer for LolCompiler {
         }
     }
 
-    // <variable-define> ::= IHAZ VARNAME ITIZ VARVALUE MKAY
-    // saves the variable in the innermost scope.
+    /// <variable-define> ::= IHAZ VARNAME ITIZ VARVALUE MKAY
+    /// saves the variable in the innermost scope.
     fn parse_variable_define(&mut self) -> Result<(), String> {
         self.expect("#IHAZ")?;
 
@@ -292,7 +295,7 @@ impl SyntaxAnalyzer for LolCompiler {
     }
 
     // <variable-use> ::= GIMMEH VAR VARNAME OIC
-    // makes sure variable is already defined somewhere 
+    /// makes sure variable is already defined somewhere 
     fn parse_variable_use(&mut self) -> Result<(), String> {
         self.expect("#GIMMEH")?;
         self.expect("VAR")?;
@@ -322,7 +325,7 @@ impl SyntaxAnalyzer for LolCompiler {
         Ok(())
     }
 
-    // <bold> ::= GIMMEH BOLD TEXT OIC
+    /// <bold> ::= GIMMEH BOLD TEXT OIC
     fn parse_bold(&mut self) -> Result<(), String> {
         self.expect("#GIMMEH")?;
         self.expect("BOLD")?;
@@ -335,7 +338,7 @@ impl SyntaxAnalyzer for LolCompiler {
         Ok(())
     }
 
-    // <list> ::= MAEK LIST <list-item> <list-items> MKAY
+    /// <list> ::= MAEK LIST <list-item> <list-items> MKAY
     fn parse_list(&mut self) -> Result<(), String> {
         self.expect("#MAEK")?;
         self.expect("LIST")?;
@@ -346,7 +349,7 @@ impl SyntaxAnalyzer for LolCompiler {
         Ok(())
     }
 
-    // <list-item> ::= GIMMEH ITEM <optional-variable-define> <inner-list> OIC
+    /// <list-item> ::= GIMMEH ITEM <optional-variable-define> <inner-list> OIC
     fn parse_list_items(&mut self) -> Result<(), String> {
         if !(self.check("#GIMMEH") && self.peek() == "ITEM") {
             return Err(format!(
@@ -371,7 +374,7 @@ impl SyntaxAnalyzer for LolCompiler {
         Ok(())
     }
 
-    // <inner-list> ::= <list-content> <inner-list> | empty   (no nested lists)
+    /// <inner-list> ::= <list-content> <inner-list> | empty   (no nested lists)
     fn parse_inner_list(&mut self) -> Result<(), String> {
         while self.starts_inner_text(false) {
             self.parse_inner_text()?;
@@ -379,7 +382,7 @@ impl SyntaxAnalyzer for LolCompiler {
         Ok(())
     }
 
-    // <link> ::= GIMMEH LINX ADDRESS OIC
+    /// <link> ::= GIMMEH LINX ADDRESS OIC
     fn parse_link(&mut self) -> Result<(), String> {
         self.expect("#GIMMEH")?;
         self.expect("LINX")?;
@@ -397,14 +400,14 @@ impl SyntaxAnalyzer for LolCompiler {
         Ok(())
     }
 
-    // <newline> ::= NEWLINE
+    /// <newline> ::= NEWLINE
     fn parse_newline(&mut self) -> Result<(), String> {
         self.expect("#NEWLINE")?;
         self.emit("<br>\n");
         Ok(())
     }
 
-    // TEXT: one plain word
+    /// TEXT: one plain word
     fn parse_text(&mut self) -> Result<(), String> {
         if !self.is_text() {
             return Err(format!(

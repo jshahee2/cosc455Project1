@@ -1,5 +1,6 @@
-// Chose Option 2 for syntax trait
+//! Chose Option 2 for syntax trait => contains all the parsing functions for the compiler
 
+/// trait that defines the syntax analyzer for the lolcode compiler
 pub trait SyntaxAnalyzer {
   fn parse_lolcode(&mut self) -> Result<(), String>;
   fn parse_head(&mut self) -> Result<(), String>;
@@ -20,6 +21,7 @@ pub trait SyntaxAnalyzer {
   fn parse_text(&mut self) -> Result<(), String>;
 }
 
+/// trait that defines the compiler for the lolcode compiler
 pub trait Compiler {
     fn compile(&mut self, source: &str);
     fn next_token(&mut self) -> String;
@@ -28,6 +30,7 @@ pub trait Compiler {
     fn set_current_token(&mut self, tok: String);
 }
 
+/// trait that defines the lexical analyzer for the lolcode compiler
 pub trait LexicalAnalyzer {
     fn get_char(&mut self) -> char;
     fn add_char(&mut self, c: char);

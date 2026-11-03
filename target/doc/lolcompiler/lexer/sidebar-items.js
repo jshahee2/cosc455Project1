@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["ANNOTATIONS"],"fn":["is_allowed_char"]};
