@@ -1,5 +1,5 @@
 [package]
-name = "cosc455_project1"
+name = "lolcompiler"
 version = "0.1.0"
 edition = "2021"
 
